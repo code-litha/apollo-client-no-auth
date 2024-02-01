@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
@@ -8,14 +9,27 @@ import {
   View,
 } from "react-native";
 import { globalStyle, utilities } from "../constant/utilities";
-import dataProducts from "../data/products.json";
+// import dataProducts from "../data/products.json";
 import { MaterialIcons } from "@expo/vector-icons";
 import ProductCard from "../components/ProductCard";
+import { gql, useQuery } from "@apollo/client";
+import ErrorText from "../components/ErrorText";
+import { GET_PRODUCTS } from "../config/queries";
 
 export default function ProductListScreen({ navigation }) {
+  const { data, loading, error } = useQuery(GET_PRODUCTS);
+
   const logout = () => {
     navigation.replace("Login");
   };
+
+  console.log({
+    data,
+    loading,
+    error,
+  });
+
+  const dataProducts = data?.getAllProducts || [];
 
   return (
     <View style={styles.container}>
@@ -66,6 +80,8 @@ export default function ProductListScreen({ navigation }) {
         />
       </View>
       <View style={{ flex: 3, marginTop: 10 }}>
+        {loading && <ActivityIndicator size="large" color={"red"} />}
+        {error && <ErrorText error={error} />}
         <FlatList
           data={dataProducts}
           renderItem={({ item, index }) => {

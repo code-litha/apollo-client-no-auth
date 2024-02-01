@@ -6,26 +6,36 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import dataProducts from "../data/products.json";
+// import dataProducts from "../data/products.json";
 import { AntDesign } from "@expo/vector-icons";
 import { globalStyle, utilities } from "../constant/utilities";
 import { renderPrice } from "../utils/renderPrice";
+import { gql, useQuery } from "@apollo/client";
+import { GET_PRODUCT } from "../config/queries";
 
 export default function ProductDetailScreen({ navigation, route }) {
   const { id } = route.params;
-  const [product, setProducts] = useState({});
+  // const [product, setProducts] = useState({});
   const [isLike, setIsLike] = useState(false);
+  const { data, loading, error } = useQuery(GET_PRODUCT, {
+    variables: {
+      productId: id,
+    },
+  });
+  const product = data?.getProductById || {};
 
-  useEffect(() => {
-    const findProduct = dataProducts.find((val) => val._id == id);
-    setProducts(findProduct || {});
-  }, [id]);
+  // useEffect(() => {
+  //   const findProduct = dataProducts.find((val) => val._id == id);
+  //   setProducts(findProduct || {});
+  // }, [id]);
 
   const onLike = () => {
     setIsLike(!isLike);
   };
 
   const goHome = () => navigation.navigate("Home");
+
+  console.log({ data, loading, error });
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
