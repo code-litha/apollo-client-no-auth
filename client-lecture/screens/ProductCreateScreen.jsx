@@ -7,8 +7,6 @@ import {
 } from "react-native";
 import { globalStyle, utilities } from "../constant/utilities";
 import { useState } from "react";
-import { gql, useMutation } from "@apollo/client";
-import { CREATE_PRODUCT, GET_PRODUCTS } from "../config/queries";
 
 export default function ProductCreateScreen({ navigation }) {
   const [form, setForm] = useState({
@@ -17,16 +15,6 @@ export default function ProductCreateScreen({ navigation }) {
     price: "",
     imgUrl: "",
   });
-  const [doCreateProduct, { data, loading, error }] = useMutation(
-    CREATE_PRODUCT,
-    {
-      onCompleted: (res) => {
-        console.log(res, "<<< response di oncompleted");
-        navigation.navigate("Home");
-      },
-      refetchQueries: [GET_PRODUCTS],
-    }
-  );
 
   const onChangeForm = (key, value) => {
     setForm({
@@ -35,23 +23,9 @@ export default function ProductCreateScreen({ navigation }) {
     });
   };
 
-  const onCreate = async () => {
+  const onCreate = () => {
     // Todo: Handle create product
-    try {
-      const res = await doCreateProduct({
-        variables: {
-          name: form.name,
-          price: Number(form.price),
-          stock: Number(form.stock),
-          imgUrl: form.imgUrl,
-        },
-      });
-
-      // console.log(res, "<<< res");
-      // navigation.navigate("Home");
-    } catch (err) {
-      console.log(err);
-    }
+    navigation.navigate("Home");
   };
 
   return (

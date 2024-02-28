@@ -1,4 +1,4 @@
-# Education React Native Apollo Client GraphQL
+# Education React Native Authentication Flow & Apollo Client GraphQL
 
 ## Table of Content
 
